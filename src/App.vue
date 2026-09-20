@@ -23,13 +23,11 @@ const defaultData = [
 
 const dramas = useStorage('my-vibrant-drama-library', defaultData)
 
-// 【极客优化】：利用 LocalStorage 记录用户是否已经知晓隐私提示
 const hasSeenPrivacyNotice = useStorage('has-seen-privacy-notice', false)
 const dismissPrivacyNotice = () => {
   hasSeenPrivacyNotice.value = true
 }
 
-// 【Data Migration】Auto-convert old string-based actors to object format
 dramas.value = dramas.value.map(drama => ({
   ...drama,
   actors: (drama.actors || []).map(a => 
@@ -208,7 +206,6 @@ const importFromJson = (event) => {
     <!-- Header Section -->
     <div class="max-w-6xl mx-auto flex flex-col mb-8 gap-4">
       
-      <!-- 【位置一：顶部常驻提示条 (带有首次访问免打扰功能)】 -->
       <div v-if="!hasSeenPrivacyNotice" class="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm animate-fade-in-down">
         <div class="flex items-start gap-2.5">
           <span class="text-lg leading-none mt-0.5">💡</span>
@@ -221,10 +218,8 @@ const importFromJson = (event) => {
         </button>
       </div>
 
-      <!-- 核心标题与操作按钮栏 -->
       <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
         
-        <!-- 左侧标题 -->
         <div>
           <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-500 tracking-tight">
             ✨ My Drama Universe
@@ -232,7 +227,6 @@ const importFromJson = (event) => {
           <p class="text-gray-500 text-sm mt-1 font-medium">Track every heart-fluttering watch</p>
         </div>
         
-        <!-- 右侧按钮群与微文案 -->
         <div class="flex flex-col items-start xl:items-end gap-2">
           
           <div class="flex items-center gap-3 flex-wrap xl:justify-end">
@@ -257,23 +251,20 @@ const importFromJson = (event) => {
               📤 {{ selectedIds.length > 0 ? `Export Selected (${selectedIds.length})` : 'Export All' }}
             </button>
             
-            <!-- 注意：这里需要你提前打包好 DramaTracker-Offline.html 并放入服务器对应目录 -->
             <a href="/mydramatracker/DramaTracker-Offline.html" download="DramaTracker-Offline.html" 
              class="px-4 py-2 bg-slate-800 text-white font-bold rounded-full shadow-md shadow-slate-300 text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1">
               ⬇️ Offline App (HTML)
             </a>
           </div>
           
-          <!-- 【位置二：微文案说明 (Action Zone Micro-copy)】 -->
           <div class="text-[11px] text-amber-600/90 font-medium flex items-center gap-1.5 px-1 mt-0.5">
             <span>⚠️</span>
             <span>Tip: Always export JSON as a backup before clearing browser data or switching devices.</span>
           </div>
 
         </div>
-      </div> <!-- 修复点：flex-row 容器在这里正确闭合 -->
+      </div>
       
-      <!-- 【位置三：黄金位置 A (Trust Badge)】 -->
       <div class="bg-emerald-50 border border-emerald-200/70 rounded-xl px-4 py-3 text-xs text-emerald-800 flex items-center gap-2.5 shadow-sm mt-1">
         <span class="text-base">🔒</span>
         <span class="font-medium"><strong>100% Local & Private:</strong> Your data never touches a server. Swap lists with friends using Import/Export above!</span>
@@ -372,7 +363,6 @@ const importFromJson = (event) => {
       </div>
     </div>
 
-    <!-- 页脚 FAQ 区域 -->
     <div class="max-w-6xl mx-auto mt-8 bg-white/50 backdrop-blur-sm border border-white rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div class="text-xs text-gray-500 max-w-2xl">
         <h4 class="font-bold text-gray-700 mb-1.5 text-sm">FAQ: Will I lose my data if I clear my browser cache?</h4>
@@ -381,11 +371,9 @@ const importFromJson = (event) => {
       </p>
       </div>
       
-      <!-- GitHub 信任锚点 -->
       <div class="text-left md:text-right shrink-0">
          <p class="font-medium text-[11px] text-gray-400 mb-1 uppercase tracking-wider">100% Open Source</p>
-         <!-- 请将此处 href 替换为你真实的 GitHub 仓库链接 -->
-         <a href="https://github.com/YOUR_GITHUB_REPO" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-sm text-gray-600 hover:text-indigo-600 transition-colors">
+         <a href="https://github.com/mucun-laomanong/mydramatracker" target="_blank" class="inline-flex items-center gap-1.5 font-bold text-sm text-gray-600 hover:text-indigo-600 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
               <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
             </svg>
